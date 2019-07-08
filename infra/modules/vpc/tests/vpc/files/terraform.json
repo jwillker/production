@@ -1,0 +1,41 @@
+{
+    "private_route_tables_id": {
+        "sensitive": false,
+        "type": "list",
+        "value": [
+            "rtb-0c7176eb22f03137c"
+        ]
+    },
+    "private_subnets_id": {
+        "sensitive": false,
+        "type": "list",
+        "value": [
+            "subnet-07ad63885f395bd42",
+            "subnet-0fb712fc42df26951",
+            "subnet-09d3588807750de63"
+        ]
+    },
+    "public_route_tables_id": {
+        "sensitive": false,
+        "type": "list",
+        "value": [
+            "rtb-03c78528dba01290d"
+        ]
+    },
+    "public_subnets_id": {
+        "sensitive": false,
+        "type": "list",
+        "value": [
+            "subnet-0320622113c61541b",
+            "subnet-05da1ec2100ff9d3a",
+            "subnet-0b609de37765ee03e"
+        ]
+    },
+    "vpc_id": {
+        "sensitive": false,
+        "type": "list",
+        "value": [
+            "vpc-0c79042d71e545318"
+        ]
+    }
+}
