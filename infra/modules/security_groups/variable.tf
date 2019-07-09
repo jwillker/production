@@ -61,5 +61,6 @@ variable "rules" {
     http-80-tcp   = [80, 80, "tcp", "HTTP"]
     # Allow HTTPS
     https-443-tcp  = [443, 443, "tcp", "HTTPS"]
+    _ = ["", "", ""]
   }
 }

@@ -1,1 +1,2 @@
 .terraform
+tests/vpc/files/terraform.json

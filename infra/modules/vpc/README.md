@@ -22,15 +22,12 @@ module "vpc" {
   }
 }
 ```
-### Environment variable
+### Environment variables and credentials:
 
-1. AWS_SECRET_ACCESS_KEY
 
-2. AWS_ACCESS_KEY_ID
+1. TF_VAR_AWS_DEFAULT_REGION
 
-3. TF_AWS_DEFAULT_REGION
-
-or just:
+Credentials:
    
     $ aws configure
 

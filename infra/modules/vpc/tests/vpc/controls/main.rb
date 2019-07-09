@@ -10,7 +10,7 @@ private_subnets = params['private_subnets_id']['value']
 title "VPC checks"
 
 control "aws_vpc_default" do
-  impact 0.7
+  impact 0.1
   title "Find the default VPC..."
   describe aws_vpc do
     it { should exist }
@@ -62,7 +62,7 @@ end
 
 
 control "aws_vpc_route_table" do
-  impact 2.0
+  impact 1.0
   title "Check if Route tables is include in this VPC"
   describe aws_route_tables do
     its('vpc_ids') { should include vpc_id }
