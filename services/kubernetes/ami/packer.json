@@ -1,0 +1,66 @@
+{
+    "variables": {
+        "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+        "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+        "aws_keypair_name": "{{env `AWS_KEYPAIR_NAME`}}",
+        "aws_keypair_file": "{{env `AWS_KEYPAIR_FILE`}}",
+        "region":         "us-east-1"
+    },
+    "builders": [
+        {
+            "access_key": "{{user `aws_access_key`}}",
+            "ami_name": "k8s-base-{{ timestamp }}",
+            "instance_type": "t2.micro",
+            "region": "us-east-1",
+            "secret_key": "{{user `aws_secret_key`}}",
+            "source_ami_filter": {
+              "filters": {
+              "virtualization-type": "hvm",
+              "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
+              "root-device-type": "ebs"
+              },
+              "owners": ["099720109477"],
+              "most_recent": true
+            },
+            "ssh_username": "ubuntu",
+            "type": "amazon-ebs",
+            "ssh_keypair_name": "{{user `aws_keypair_name`}}",
+            "ssh_private_key_file": "{{user `aws_keypair_file`}}",
+            "tags": {
+                "Name": "K8s-base-Packer-Ansible"
+            }
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "sleep 10s",
+                "sudo apt-get -y update",
+                "sudo apt-get -y upgrade",
+                "sudo apt-get install -y python-dev python-pip",
+                "sudo pip install ansible"
+            ]
+        },
+
+        {
+            "type": "ansible-local",
+            "playbook_file": "./playbook.yml"
+        },
+
+        {
+            "type": "inspec",
+            "profile": "./tests/base"
+        },
+
+        {
+            "type": "shell",
+            "inline": [
+                "sleep 5s",
+                "sudo apt-get -y purge python-dev python-pip",
+                "echo 'Complete'"
+            ]
+        }
+
+    ]
+}

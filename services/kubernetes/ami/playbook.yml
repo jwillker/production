@@ -1,0 +1,67 @@
+---
+- hosts: localhost
+  connection: local
+  become: yes
+  become_user: root
+  become_method: sudo 
+  tasks:
+    - name: Remove swapfile from /etc/fstab
+      mount:
+        name: swap
+        fstype: swap
+        state: absent
+    - name: Disable swap
+      command: swapoff -a
+
+# Install Docker
+
+    - name: Install Docker dependencies
+      apt:
+        pkg: [
+        'apt-transport-https',
+        'ca-certificates',
+        'gnupg-agent',
+        'curl',
+        'software-properties-common'
+        ]
+        state: present
+
+    - name: Add Docker’s official GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
+        state: present
+
+    - name: apt update
+      apt: update_cache=yes
+
+    - apt: name=docker-ce state=present
+      
+    - apt: name=docker-ce-cli state=present
+      
+    - apt: name=containerd.io state=present
+
+    - name: add user mod
+      command: usermod -aG docker ubuntu
+
+# Install Kubernetes tools
+
+    - name: Add Google’s official GPG key
+      apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        state: present
+
+    - apt_repository:
+        repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+        state: present
+      
+    - name: apt update
+      apt: update_cache=yes
+
+    - name: Install Kubernetes tools
+      apt:
+        pkg: ['kubelet', 'kubeadm', 'kubectl']
+        state: present
