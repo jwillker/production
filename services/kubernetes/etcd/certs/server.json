@@ -1,0 +1,19 @@
+{
+    "CN": "etcd.k8s.devopxlabs.com",
+    "hosts": [
+        "etcd-a.k8s.devopxlabs.com",
+        "etcd-b.k8s.devopxlabs.com",
+        "etcd-c.k8s.devopxlabs.com"
+    ],
+    "key": {
+        "algo": "ecdsa",
+        "size": 256
+    },
+    "names": [
+        {
+            "C": "US",
+            "ST": "CA",
+            "L": "San Francisco"
+        }
+    ]
+}

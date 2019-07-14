@@ -22,3 +22,8 @@ output "private_route_tables_id" {
   description = "The ID of the Private Route tables"
   value       = "${module.vpc.private_route_tables_id}"
 }
+
+output "bastion_ip" {
+  description = "The bastion public ip for ssh access"
+  value       = "${module.bastion.public_ip}"
+}

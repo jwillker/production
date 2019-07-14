@@ -2,12 +2,17 @@ variable "ami" {
   description = "ID of AMI to use for the instance"
 }
 
+variable "associate_public_ip_address" {
+  description = "If true, the EC2 instance will have associated public IP address"
+  default     = false
+}
+
 variable "key_name" {
   description = "The key name to use for the instance"
   default     = ""
 }
 
-variable "count" {
+variable "servers" {
   description = "Number of instances to launch"
   default     = 1
 }
@@ -21,6 +26,15 @@ variable "instance_type" {
   description = "The type of instance to start"
 }
 
+# TODO descriptions
+variable "availability_zone" {}
+variable "iam_instance_profile" {}
+
+#variable "depends_on" {
+#  description = "Depend"
+#  default     = ""
+#}
+
 variable "name" {
   description = "The name of instance"
 }
@@ -28,6 +42,10 @@ variable "name" {
 variable "vpc_security_group_ids" {
   description = "A list of security group IDs to associate with"
   type        = "list"
+}
+
+variable "subnet_id" {
+  description = "The VPC Subnet ID to launch in"
 }
 
 variable "tags" {

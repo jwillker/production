@@ -9,7 +9,7 @@
     "builders": [
         {
             "access_key": "{{user `aws_access_key`}}",
-            "ami_name": "k8s-base-{{ timestamp }}",
+            "ami_name": "etcd-base-{{ timestamp }}",
             "instance_type": "t2.micro",
             "region": "us-east-1",
             "secret_key": "{{user `aws_secret_key`}}",
@@ -27,7 +27,7 @@
             "ssh_keypair_name": "{{user `aws_keypair_name`}}",
             "ssh_private_key_file": "{{user `aws_keypair_file`}}",
             "tags": {
-                "Name": "K8s-base-Packer-Ansible"
+                "Name": "etcd-base-Packer-Ansible"
             }
         }
     ],
@@ -36,27 +36,22 @@
             "type": "shell",
             "inline": [
                 "sleep 10s",
-                "sudo apt-get -y update",
-                "sudo apt-get -y upgrade",
-                "sudo apt-get install -y python-dev python-pip",
-                "sudo pip install ansible",
-                "sudo pip install awscli"
+                "sudo apt-get -y update"
             ]
         },
         {
             "type": "file",
-            "source": "./kubeadm-config.yml",
-            "destination": "/tmp/kubeadm-config.yml"
+            "source": "./etcd.service",
+            "destination": "/tmp/etcd.service"
         },
-
         {
-            "type": "ansible-local",
-            "playbook_file": "./playbook.yml"
+            "type": "file",
+            "source": "./etcd.conf",
+            "destination": "/tmp/etcd.conf"
         },
-
         {
-            "type": "inspec",
-            "profile": "./tests/base"
+            "type": "shell",
+            "script": "./install.sh"
         }
 
     ]

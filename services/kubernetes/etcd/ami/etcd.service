@@ -1,0 +1,11 @@
+[Unit]
+Description=etcd key-value store
+[Service]
+User=etcd
+Type=notify
+ExecStart=/usr/bin/etcd --config-file=/etc/etcd/etcd.conf
+Restart=always
+RestartSec=10s
+LimitNOFILE=40000
+[Install]
+WantedBy=ready.target

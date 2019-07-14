@@ -50,7 +50,7 @@ module "ec2_instance" {
   name             = "Instance"
   ami              = "${data.aws_ami.amazon_linux.id}"
   instance_type    = "t2.micro"
-  count            = 1
+  servers          = 1
   user_data_base64 = "${base64encode(local.instance-userdata)}"
   key_name         = "deployer-key" 
 
