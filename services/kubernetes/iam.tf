@@ -1,5 +1,5 @@
 resource "aws_iam_instance_profile" "aws_iam_instance_profile" {
-  name_prefix = "paramstore_aws_iam_instance_profile-"
+  name_prefix = "kubernetes_aws_iam_instance_profile-"
   role        = "${aws_iam_role.assume_role.name}"
 }
 
@@ -60,6 +60,34 @@ resource "aws_iam_role_policy" "ebs" {
                 "ec2:DescribeVolumes",
                 "ec2:AttachVolume"
             ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "cloud-provider" {
+  name_prefix = "aws-cloud-provider-"
+  role        = "${aws_iam_role.assume_role.id}"
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "ec2:*",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "elasticloadbalancing:*",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "ecr:*",
             "Resource": "*"
         }
     ]

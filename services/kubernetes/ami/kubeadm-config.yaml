@@ -1,0 +1,37 @@
+apiVersion: kubeadm.k8s.io/v1beta1
+kind: ClusterConfiguration
+kubernetesVersion: "v1.13.2"
+apiServer:
+  extraArgs:
+    cloud-provider: aws
+  certSANs:
+  - "kubernetes.k8s.devopxlabs.com"
+clusterName: lab
+controlPlaneEndpoint: "kubernetes.k8s.devopxlabs.com"
+controllerManager:
+  extraArgs:
+    cloud-provider: aws
+    configure-cloud-routes: "false"
+    address: 0.0.0.0
+etcd:
+    external:
+        endpoints:
+        - https://etcd-a.k8s.devopxlabs.com:2379
+        - https://etcd-b.k8s.devopxlabs.com:2379
+        - https://etcd-c.k8s.devopxlabs.com:2379
+        caFile: /etc/kubernetes/pki/etcd/ca.crt
+        certFile: /etc/kubernetes/pki/apiserver-etcd-client.crt
+        keyFile: /etc/kubernetes/pki/apiserver-etcd-client.key
+networking:
+  dnsDomain: cluster.local
+  podSubnet: 10.244.0.0/16
+scheduler:
+  extraArgs:
+    address: 0.0.0.0
+
+---
+apiVersion: kubeadm.k8s.io/v1beta1
+kind: InitConfiguration
+nodeRegistration:
+  kubeletExtraArgs:
+    cloud-provider: aws

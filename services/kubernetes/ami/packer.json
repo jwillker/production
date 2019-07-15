@@ -16,7 +16,7 @@
             "source_ami_filter": {
               "filters": {
               "virtualization-type": "hvm",
-              "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
+              "name": "ubuntu/images/*ubuntu-bionic-18.04-amd64-server-*",
               "root-device-type": "ebs"
               },
               "owners": ["099720109477"],
@@ -33,20 +33,28 @@
     ],
     "provisioners": [
         {
+            "type": "file",
+            "source": "./kubeadm-config.yaml",
+            "destination": "/tmp/kubeadm-config.yaml"
+        },
+        {
+            "type": "file",
+            "source": "./sys-fs-bpf.mount",
+            "destination": "/tmp/sys-fs-bpf.mount"
+        },
+
+        {
             "type": "shell",
             "inline": [
                 "sleep 10s",
+                "sudo mv /tmp/kubeadm-config.yaml /opt/kubeadm-config.yaml",
+                "sudo mv /tmp/sys-fs-bpf.mount /etc/systemd/system/sys-fs-bpf.mount",
                 "sudo apt-get -y update",
                 "sudo apt-get -y upgrade",
                 "sudo apt-get install -y python-dev python-pip",
                 "sudo pip install ansible",
                 "sudo pip install awscli"
             ]
-        },
-        {
-            "type": "file",
-            "source": "./kubeadm-config.yml",
-            "destination": "/tmp/kubeadm-config.yml"
         },
 
         {

@@ -6,10 +6,10 @@ resource "aws_instance" "instance" {
   key_name         = "${var.key_name}"
   subnet_id        = "${var.subnet_id}"
 
-  availability_zone    = "${var.availability_zone}"
-  iam_instance_profile = "${var.iam_instance_profile}"
-
-  vpc_security_group_ids = ["${var.vpc_security_group_ids}"]
+  availability_zone           = "${var.availability_zone}"
+  iam_instance_profile        = "${var.iam_instance_profile}"
+  associate_public_ip_address = "${var.public_ip_address}"
+  vpc_security_group_ids      = ["${var.vpc_security_group_ids}"]
 # TODO merge var.name with count
   tags = "${merge(map("Name", format("%s", var.name)), var.tags)}"
 

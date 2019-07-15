@@ -27,3 +27,8 @@ output "bastion_ip" {
   description = "The bastion public ip for ssh access"
   value       = "${module.bastion.public_ip}"
 }
+
+output "master_private_ip" {
+  description = "The master private ip"
+  value       = "${module.master-1.private_ip}"
+}

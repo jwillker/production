@@ -4,6 +4,11 @@ set -euxo pipefail
 
 locale-gen en_GB.UTF-8
 
+hostnamectl set-hostname $(curl http://169.254.169.254/latest/meta-data/local-hostname)
+
+#This is a requirement for some CNI plugins to work
+sysctl net.bridge.bridge-nf-call-iptables=1
+
 mkdir -p /etc/kubernetes/pki/etcd
 
 aws ssm get-parameters --names "etcd-ca" --query '[Parameters[0].Value]' --output text  --with-decryption --region us-east-1 > /etc/kubernetes/pki/etcd/ca.crt

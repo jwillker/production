@@ -2,7 +2,7 @@ module "etcd" {
   source           = "../instances"
   name             = "etcd-k8s-${var.zone_suffix}"
   ami              = "${data.aws_ami.ubuntu_1604.id}"
-  instance_type    = "t2.micro"
+  instance_type    = "t2.medium"
   servers          = 1
   user_data_base64 = "${base64encode(file("etcd.sh"))}"
   key_name         = "Bastion_Key"

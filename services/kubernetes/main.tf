@@ -80,7 +80,7 @@ module "master-1" {
   source                 = "../../infra/modules/instances"
   name                   = "master-1"
   ami                    = "${data.aws_ami.k8s-base.id}"
-  instance_type          = "t2.micro"
+  instance_type          = "t2.medium"
   servers                = 1
   user_data_base64       = "${base64encode(file("master_init.sh"))}"
   key_name               = "Bastion_Key"
@@ -99,7 +99,7 @@ module "master-2" {
   source                 = "../../infra/modules/instances"
   name                   = "master-2"
   ami                    = "${data.aws_ami.k8s-base.id}"
-  instance_type          = "t2.micro"
+  instance_type          = "t2.medium"
   servers                = 1
   user_data_base64       = "${base64encode(file("master_join.sh"))}"
   key_name               = "Bastion_Key"
@@ -118,7 +118,7 @@ module "master-3" {
   source                 = "../../infra/modules/instances"
   name                   = "master-3"
   ami                    = "${data.aws_ami.k8s-base.id}"
-  instance_type          = "t2.micro"
+  instance_type          = "t2.medium"
   servers                = 1
   user_data_base64       = "${base64encode(file("master_join.sh"))}"
   key_name               = "Bastion_Key"
@@ -162,7 +162,7 @@ module "bastion" {
   iam_instance_profile        = "${aws_iam_instance_profile.aws_iam_instance_profile.name}"
   availability_zone           = "${element(data.aws_availability_zones.available.names, 0)}"
   subnet_id                   = "${element(module.vpc.public_subnets_id, 0)}"
-  associate_public_ip_address = true
+  public_ip_address           = true
   vpc_security_group_ids      = ["${module.ssh-sg.security_group_id}"]
 }
 

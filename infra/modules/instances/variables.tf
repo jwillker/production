@@ -2,7 +2,7 @@ variable "ami" {
   description = "ID of AMI to use for the instance"
 }
 
-variable "associate_public_ip_address" {
+variable "public_ip_address" {
   description = "If true, the EC2 instance will have associated public IP address"
   default     = false
 }
