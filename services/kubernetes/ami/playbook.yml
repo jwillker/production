@@ -63,7 +63,7 @@
 
     - name: Install Kubernetes tools
       apt:
-        pkg: ['kubernetes-cni=0.6.0-00','kubelet=1.13.2-00', 'kubeadm=1.13.2-00', 'kubectl']
+        pkg: ['kubelet=1.13.5-00', 'kubeadm=1.13.5-00', 'kubectl=1.13.5-00']
         state: present
 
 # Mounting BPFFS with systemd

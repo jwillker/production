@@ -32,3 +32,5 @@ data "aws_ami" "k8s-base" {
 
   owners = ["self"]
 }
+
+data "aws_availability_zones" "available" {}

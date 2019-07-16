@@ -1,14 +1,5 @@
-# TODO separate resources ex: data in data.tf files, backend in backend.tf file...
 provider "aws" {
   region = "${var.AWS_DEFAULT_REGION}"
-}
-
-terraform {
-  backend "s3" {
-    bucket = "devopxlabs-terraform-state"
-    key    = "kubernetes/terraform.tfstate"
-    region = "us-east-1"
-  }
 }
 
 locals {
@@ -19,14 +10,6 @@ locals {
   kube_cluster_tag = "kubernetes.io/cluster/${var.cluster_name}"
 }
 
-data "aws_availability_zones" "available" {}
-
-
-# VPC Resources
-#  * VPC
-#  * Subnets
-#  * Internet Gateway
-#  * Route Table
 module "vpc" {
   source = "../../infra/modules/vpc"
   name   = "standard"
@@ -176,6 +159,7 @@ module "security_group" {
   ingress_cidr_blocks = ["0.0.0.0/0"]
 
   ingress_rules = [
+    "all-all", # TODO remove this
     "ssh-tcp",
     "all-icmp",
     "etcd-2379-tcp",
