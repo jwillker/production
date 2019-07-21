@@ -1,0 +1,12 @@
+# nodejs
+/node_modules
+
+# intellij
+/.idea
+
+# macos
+.DS_Store
+
+# misc
+*.log
+.discounts

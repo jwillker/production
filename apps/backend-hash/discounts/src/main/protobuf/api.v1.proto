@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package com.pasviegas.discounts.v1;
+
+/* Basic details for every message, contains the request id and
+ * any error message that may occur.
+ */
+message Details {
+    string request_id = 1;
+    string error = 2;
+}
+
+/* Contains the discount for a given product.
+ *
+ * The response from getDiscounts method.
+ */
+message GetDiscountsResponse {
+    Details details = 1;
+
+    float pct = 2;
+    int32 value_in_cents = 3;
+}
+
+/* Contains the user and product ids so the the api can
+ * compute a possible discount.
+ *
+ * The request for getDiscounts method.
+ */
+message GetDiscountsRequest {
+    Details details = 1;
+
+    string product_id = 2;
+    string user_id = 3;
+}
+
+/* The v1 service for the discounts api. */
+service Api {
+
+    /* Streams all the discounts for the given products. */
+    rpc getDiscounts (stream GetDiscountsRequest) returns (stream GetDiscountsResponse) {
+    }
+}
+
+
+

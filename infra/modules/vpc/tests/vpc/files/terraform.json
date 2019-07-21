@@ -3,39 +3,39 @@
         "sensitive": false,
         "type": "list",
         "value": [
-            "rtb-0c7176eb22f03137c"
+            "rtb-0ed64d71411121a2f"
         ]
     },
     "private_subnets_id": {
         "sensitive": false,
         "type": "list",
         "value": [
-            "subnet-07ad63885f395bd42",
-            "subnet-0fb712fc42df26951",
-            "subnet-09d3588807750de63"
+            "subnet-08d4d96318124db02",
+            "subnet-0266605caa2ce3df6",
+            "subnet-0f752ed576c1239f2"
         ]
     },
     "public_route_tables_id": {
         "sensitive": false,
         "type": "list",
         "value": [
-            "rtb-03c78528dba01290d"
+            "rtb-0d3f2ec787255bada"
         ]
     },
     "public_subnets_id": {
         "sensitive": false,
         "type": "list",
         "value": [
-            "subnet-0320622113c61541b",
-            "subnet-05da1ec2100ff9d3a",
-            "subnet-0b609de37765ee03e"
+            "subnet-0f1e01cfad206fc61",
+            "subnet-0774f37da1b79ec1b",
+            "subnet-024b497f7727c12c9"
         ]
     },
     "vpc_id": {
         "sensitive": false,
         "type": "list",
         "value": [
-            "vpc-0c79042d71e545318"
+            "vpc-009f12b64078943c8"
         ]
     }
 }

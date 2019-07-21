@@ -26,14 +26,12 @@ variable "instance_type" {
   description = "The type of instance to start"
 }
 
-# TODO descriptions
-variable "availability_zone" {}
-variable "iam_instance_profile" {}
-
-#variable "depends_on" {
-#  description = "Depend"
-#  default     = ""
-#}
+variable "availability_zone" {
+  description = "The list of availability zones to use one for each node"
+}
+variable "iam_instance_profile" {
+  description = "Profile to attach in nodes, for access SSM"
+}
 
 variable "name" {
   description = "The name of instance"

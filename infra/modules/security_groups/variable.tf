@@ -64,6 +64,9 @@ variable "rules" {
     # ETCD
     etcd-2379-tcp  = [2379, 2379, "tcp", "ETCD"]
     etcd-2380-tcp  = [2380, 2380, "tcp", "ETCD"]
+    kubelet-10250-tcp = [10250, 10250, "tcp", "Kubelet API"]
+    kube-scheduler-10251-tcp = [10251, 10251, "tcp", "kube-scheduler"]
+    kube-controller-mgt-10252-tcp = [10252, 10252, "tcp", "kube-controller-manager"]
     _ = ["", "", ""]
   }
 }

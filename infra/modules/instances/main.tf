@@ -10,7 +10,7 @@ resource "aws_instance" "instance" {
   iam_instance_profile        = "${var.iam_instance_profile}"
   associate_public_ip_address = "${var.public_ip_address}"
   vpc_security_group_ids      = ["${var.vpc_security_group_ids}"]
-# TODO merge var.name with count
+
   tags = "${merge(map("Name", format("%s", var.name)), var.tags)}"
 
   #depends_on = ["${var.depends_on}"]
@@ -18,3 +18,5 @@ resource "aws_instance" "instance" {
     create_before_destroy = true
   }
 }
+
+# TODO add key_pair create resource

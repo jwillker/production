@@ -1,0 +1,46 @@
+syntax = "proto3";
+package products.v1;
+
+import "google/api/annotations.proto";
+
+/* The request from getProducts method. */
+message GetProductsRequest {
+}
+
+/* Contains a list of products with discounts.
+ *
+ * The response from getProducts method.
+ */
+message GetProductsResponse {
+    repeated Product products = 1;
+}
+
+/* Full product model. */
+message Product {
+    string id = 1;
+    int32 price_in_cents = 2;
+    string title = 3;
+    string description = 4;
+    Discount discount = 5;
+
+    message Discount {
+        float pct = 1;
+        int32 value_in_cents = 2;
+    }
+}
+
+/* The v1 service for the product api. */
+service Api {
+
+  /* Lists all the products and apply discounts if the user id found in the
+   * request headers (X-USER-ID).
+   *
+   * Can be called through rest using the configured endpoint.
+   */
+  rpc getProducts (GetProductsRequest) returns (GetProductsResponse) {
+    option (google.api.http) = {
+      get: "/products"
+      body: "*"
+    };
+  }
+}

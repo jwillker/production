@@ -10,7 +10,6 @@ data "aws_ami" "ubuntu_1604" {
     name   = "tag:Name"
     values = ["etcd-base-Packer-Ansible"]
   }
-  # TODO find way to get owner
   owners    = ["self"]
 }
 
@@ -18,3 +17,13 @@ data "aws_ami" "ubuntu_1604" {
 #  name = "k8s.devopxlabx.com"
 #}
 #
+
+data "template_file" "user_data" {
+  template = "${file("${path.module}/user-data-etcd.sh")}"
+
+  vars {
+    aws_region = "${data.aws_region.current.name}"
+  }
+}
+
+data "aws_region" "current" {}

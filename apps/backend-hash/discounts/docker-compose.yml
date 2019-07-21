@@ -1,0 +1,22 @@
+version: "2"
+
+services:
+  mysql:
+    build: ../database
+  api:
+    build: .
+    environment:
+      APP_NAME: "discounts-api"
+      APP_ENV: "development"
+      LOG_LEVEL: "INFO"
+      DB_HOST: "database"
+      DB_DATABASE: "api"
+      DB_USERNAME: "root"
+      DB_PASSWORD: "secret"
+      GRPC_PORT: "5001"
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./target/scala-2.12:/server/target/scala-2.12
+    links:
+      - mysql:database

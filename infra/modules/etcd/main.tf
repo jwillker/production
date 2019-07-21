@@ -1,33 +1,68 @@
-module "etcd" {
+module "etcd-1" {
   source           = "../instances"
-  name             = "etcd-k8s-${var.zone_suffix}"
+  name             = "etcd-k8s-1"
   ami              = "${data.aws_ami.ubuntu_1604.id}"
   instance_type    = "t2.medium"
   servers          = 1
-  user_data_base64 = "${base64encode(file("etcd.sh"))}"
+  user_data_base64 = "${base64encode(data.template_file.user_data.rendered)}"
   key_name         = "Bastion_Key"
-  subnet_id        = "${var.subnet_id}"
+  subnet_id        = "${element(var.subnet_id, 0)}"
 
   iam_instance_profile = "${var.iam_instance_profile}"
 
-  availability_zone = "${var.availability_zone}"
+  availability_zone = "${element(var.availability_zone, 0)}"
 
   vpc_security_group_ids = [
     "${var.sg_id}"
   ]
-  #TODO ebs attach the right zone
-  #depends_on = "aws_ebs_volume.ebs-volume"
 
   tags   = {
     Environment = "staging"
   }
 }
 
+module "etcd-2" {
+  source           = "../instances"
+  name             = "etcd-k8s-2"
+  ami              = "${data.aws_ami.ubuntu_1604.id}"
+  instance_type    = "t2.medium"
+  servers          = 1
+  user_data_base64 = "${base64encode(data.template_file.user_data.rendered)}"
+  key_name         = "Bastion_Key"
+  subnet_id        = "${element(var.subnet_id, 1)}"
 
-resource "aws_route53_record" "etcd" {
-  zone_id = "${var.zone_id}"
-  name    = "etcd-${var.zone_suffix}"
-  type    = "A"
-  ttl     = "300"
-  records = ["${module.etcd.private_ip}"]
+  iam_instance_profile = "${var.iam_instance_profile}"
+
+  availability_zone = "${element(var.availability_zone, 1)}"
+
+  vpc_security_group_ids = [
+    "${var.sg_id}"
+  ]
+
+  tags   = {
+    Environment = "staging"
+  }
+}
+
+module "etcd-3" {
+  source           = "../instances"
+  name             = "etcd-k8s-3"
+  ami              = "${data.aws_ami.ubuntu_1604.id}"
+  instance_type    = "t2.medium"
+  servers          = 1
+  user_data_base64 = "${base64encode(data.template_file.user_data.rendered)}"
+  key_name         = "Bastion_Key"
+  subnet_id        = "${element(var.subnet_id, 2)}"
+
+  iam_instance_profile = "${var.iam_instance_profile}"
+
+  availability_zone = "${element(var.availability_zone, 2)}"
+
+  vpc_security_group_ids = [
+    "${var.sg_id}"
+  ]
+
+  tags   = {
+    Environment = "staging"
+  }
 }

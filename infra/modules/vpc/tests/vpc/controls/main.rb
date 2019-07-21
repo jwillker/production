@@ -22,7 +22,7 @@ control "aws_vpc_check_cidr" do
   title "Check if cird_block is correct"
   describe aws_vpc(vpc_id: vpc_id) do
     it { should exist }
-    its('cidr_block') { should cmp '10.0.0.0/16' }
+    its('cidr_block') { should cmp '17.0.0.0/16' }
   end
 end
 

@@ -1,0 +1,64 @@
+{
+  "name": "products",
+  "version": "1.0.0",
+  "description": "List products api",
+  "scripts": {
+    "precommit": "lint-staged",
+    "start": "node src/index.js",
+    "test": "jest",
+    "lint": "eslint './src/**/*.js' --fix",
+    "format": "prettier --print-width 100 --trailing-comma es5 --single-quote --write 'src/**/*.js'"
+  },
+  "dependencies": {
+    "@grpc/proto-loader": "0.3.0",
+    "body-parser": "1.18.3",
+    "express": "4.16.4",
+    "figlet": "^1.2.1",
+    "grpc": "1.15.1",
+    "grpc-dynamic-gateway": "0.3.4",
+    "knex": "0.15.2",
+    "loglevel": "1.6.1",
+    "mysql2": "1.6.1",
+    "nconf": "0.10.0",
+    "ramda": "0.25.0"
+  },
+  "devDependencies": {
+    "eslint": "5.7.0",
+    "grpc-tools": "1.6.6",
+    "husky": "1.1.2",
+    "jest": "23.6.0",
+    "lint-staged": "7.3.0",
+    "prettier": "1.14.3",
+    "stream-mock": "1.2.0"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/!(boot)/**/*.js",
+      "!src/database/index.js",
+      "!src/api/core/grpc/**/*.js",
+      "!src/api/v1/index.js"
+    ],
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!jest-mock-object)"
+    ],
+    "collectCoverage": true,
+    "coverageReporters": [
+      "text"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 65,
+        "functions": 70,
+        "lines": 70,
+        "statements": 70
+      }
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --print-width 100 --trailing-comma es5 --single-quote --write",
+      "git add"
+    ]
+  }
+}

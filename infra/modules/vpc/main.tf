@@ -5,8 +5,6 @@
 #  * Internet Gateway
 #  * Route Table
 #
-# TODO
-# * AZ dynamic
 
 #terraform {
 #  required_version = ">= 0.11.9" 

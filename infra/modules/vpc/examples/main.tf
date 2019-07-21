@@ -10,13 +10,6 @@ terraform {
   }
 }
 
-locals {
-  az_count         = "${length(data.aws_availability_zones.available.names)}"
-  az_a             = "${var.AWS_DEFAULT_REGION}a"
-  az_b             = "${var.AWS_DEFAULT_REGION}b"
-  az_c             = "${var.AWS_DEFAULT_REGION}c"
-  #kube_cluster_tag = "kubernetes.io/cluster/${var.cluster_name}"
-}
 
 data "aws_availability_zones" "available" {
 }

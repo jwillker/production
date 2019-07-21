@@ -6,3 +6,8 @@ data "aws_vpc" "default" {
   }
 }
 
+data "aws_subnet_ids" "subnets" {
+  vpc_id = "${data.aws_vpc.default.id}"
+}
+
+
