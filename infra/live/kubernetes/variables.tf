@@ -4,5 +4,5 @@ variable "AWS_DEFAULT_REGION" {
 
 variable "cluster_name" {
   description = "Name of the cluster"
-  default     = "Production"
+  default     = "lab"
 }

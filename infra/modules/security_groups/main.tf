@@ -37,6 +37,20 @@ resource "aws_security_group_rule" "ingress_with_cidr_blocks" {
   protocol  = "${lookup(var.ingress_with_cidr_blocks[count.index], "protocol", element(var.rules[lookup(var.ingress_with_cidr_blocks[count.index], "rule", "_")], 2))}"
 }
 
+resource "aws_security_group_rule" "ingress_with_source_security_group_id" {
+  count = "${var.create ? length(var.ingress_with_source_security_group_id) : 0}"
+
+  security_group_id = "${aws_security_group.security_group.id}"
+  type              = "ingress"
+
+  source_security_group_id = "${lookup(var.ingress_with_source_security_group_id[count.index], "source_security_group_id")}"
+  description              = "${lookup(var.ingress_with_source_security_group_id[count.index], "description", "Ingress Rule")}"
+
+  from_port = "${lookup(var.ingress_with_source_security_group_id[count.index], "from_port", element(var.rules[lookup(var.ingress_with_source_security_group_id[count.index], "rule", "_")], 0))}"
+  to_port   = "${lookup(var.ingress_with_source_security_group_id[count.index], "to_port", element(var.rules[lookup(var.ingress_with_source_security_group_id[count.index], "rule", "_")], 1))}"
+  protocol  = "${lookup(var.ingress_with_source_security_group_id[count.index], "protocol", element(var.rules[lookup(var.ingress_with_source_security_group_id[count.index], "rule", "_")], 2))}"
+}
+
 resource "aws_security_group_rule" "egress_rules" {
   count = "${var.create ? length(var.egress_rules) : 0}"
 

@@ -26,6 +26,11 @@ variable "ingress_with_cidr_blocks" {
   default     = []
 }
 
+variable "ingress_with_source_security_group_id" {
+  description = "List of ingress rules to create where 'source_security_group_id' is used"
+  default     = []
+}
+
 variable "ingress_rules" {
   description = "List of ingress rules to create"
   default     = []
@@ -64,9 +69,12 @@ variable "rules" {
     # ETCD
     etcd-2379-tcp  = [2379, 2379, "tcp", "ETCD"]
     etcd-2380-tcp  = [2380, 2380, "tcp", "ETCD"]
+    api-server-6443-tcp = [6443, 6443, "tcp", "Api server"]
+    cilium-8472-udp = [8472, 8472, "udp", "Cilium"]
     kubelet-10250-tcp = [10250, 10250, "tcp", "Kubelet API"]
     kube-scheduler-10251-tcp = [10251, 10251, "tcp", "kube-scheduler"]
     kube-controller-mgt-10252-tcp = [10252, 10252, "tcp", "kube-controller-manager"]
+    node-ports-30000-tcp = [30000, 32767, "tcp", "Node Ports"]
     _ = ["", "", ""]
   }
 }

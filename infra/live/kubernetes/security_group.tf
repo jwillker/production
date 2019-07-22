@@ -23,36 +23,41 @@ module "security_group" {
   vpc_id      = "${element(module.vpc.vpc_id, 0)}"
   description = "Kubernetes comunication"
 
-  ingress_cidr_blocks = ["0.0.0.0/0"]
-
+  ingress_cidr_blocks = ["0.0.0.0/0"] # VPC CIDR BLOCK
+  # TODO fix the error caused by use this
+#  ingress_with_source_security_group_id = [
+#    {
+#      rule                     = "all-icmp"
+#      source_security_group_id = "${element(module.security_group.security_group_id, 0)}"
+#    },
+#    {
+#      rule                     = "cilium-8472-udp"
+#      source_security_group_id = "${element(module.security_group.security_group_id, 0)}"
+#    },
+#    {
+#      rule                     = "kubelet-10250-tcp"
+#      source_security_group_id = "${element(module.security_group.security_group_id, 0)}"
+#    },
+#    {
+#      rule                     = "kube-scheduler-10251-tcp"
+#      source_security_group_id = "${element(module.security_group.security_group_id, 0)}"
+#    },
+#    {
+#      rule                     = "kube-controller-mgt-10252-tcp"
+#      source_security_group_id = "${element(module.security_group.security_group_id, 0)}"
+#    },
+#  ]
+#
   ingress_rules = [
-    #"all-all", # TODO remove this
     "ssh-tcp",
     "all-icmp",
-    "etcd-2379-tcp",
-    "etcd-2380-tcp",
+    "api-server-6443-tcp",
+    "cilium-8472-udp",
     "kubelet-10250-tcp",
     "kube-scheduler-10251-tcp",
     "kube-controller-mgt-10252-tcp",
+    "node-ports-30000-tcp",
   ]
-
-  ingress_with_cidr_blocks = [
-    {
-      from_port   = 6443
-      to_port     = 6443
-      protocol    = "tcp"
-      cidr_blocks = "0.0.0.0/0"
-      description = "Kubernetes API server"
-    },
-    {
-      from_port   = 30000
-      to_port     = 32767
-      protocol    = "tcp"
-      cidr_blocks = "0.0.0.0/0"
-      description = "NodePorts"
-    },
-  ]
-
   egress_rules = ["all-all"]
 }
 

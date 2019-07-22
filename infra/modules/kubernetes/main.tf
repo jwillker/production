@@ -86,7 +86,7 @@ resource "aws_autoscaling_group" "nodes" {
   launch_configuration = "${aws_launch_configuration.nodes.name}"
   vpc_zone_identifier  = ["${var.subnet_id}"]
   max_size             = "${var.nodes + 10}"
-  min_size             = "2"
+  min_size             = "${var.nodes}"
   desired_capacity     = "${var.nodes}"
 
   health_check_type         = "EC2"
