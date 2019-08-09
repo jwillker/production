@@ -69,6 +69,7 @@ variable "rules" {
     # ETCD
     etcd-2379-tcp  = [2379, 2379, "tcp", "ETCD"]
     etcd-2380-tcp  = [2380, 2380, "tcp", "ETCD"]
+    mysql-3306-tcp  = [3306, 3306, "tcp", "MYSQL"]
     api-server-6443-tcp = [6443, 6443, "tcp", "Api server"]
     cilium-8472-udp = [8472, 8472, "udp", "Cilium"]
     kubelet-10250-tcp = [10250, 10250, "tcp", "Kubelet API"]

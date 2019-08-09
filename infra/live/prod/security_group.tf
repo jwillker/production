@@ -1,3 +1,18 @@
+module "db_sg" {
+  source      = "../../modules/security_groups"
+  name        = "db_sg"
+  vpc_id      = "${element(module.vpc.vpc_id, 0)}"
+  description = "etcd_sg"
+
+  ingress_cidr_blocks = ["0.0.0.0/0"]
+
+  ingress_rules = [
+    "mysql-3306-tcp",
+  ]
+
+  egress_rules = ["all-all"]
+}
+
 module "etcd_sg" {
   source      = "../../modules/security_groups"
   name        = "etcd_sg"

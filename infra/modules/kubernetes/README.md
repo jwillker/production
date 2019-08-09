@@ -14,7 +14,7 @@ module "k8s-cluster" {
   zone_id                = "${aws_route53_zone.k8s_private_zone.zone_id}"
   subnet_id              = "${module.vpc.private_subnets_id}"
   api_lb_subnets         = "${module.vpc.public_subnets_id}"
-  api_lb_vpc_id          = "${element(module.vpc.vpc_id, 0)}" 
+  api_lb_vpc_id          = "${element(module.vpc.vpc_id, 0)}"
  }
 ...
 ```
@@ -24,9 +24,17 @@ module "k8s-cluster" {
 1. TF_VAR_AWS_DEFAULT_REGION
 
 Credentials:
-   
+
     $ aws configure
 
 # Build ami
 
     $ packer build ami/packer.json
+
+
+
+# BEFORE DESTROY
+
+    $ kubectl delete ns istio-system
+
+Istio had created an lb resource

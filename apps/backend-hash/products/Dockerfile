@@ -1,7 +1,7 @@
-FROM node:9-slim
+FROM node:9-alpine
 
-COPY ./.discounts /discounts
-COPY . /server
+COPY ./discounts /discounts
+COPY ./products /server
 
 WORKDIR /server
 

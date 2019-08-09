@@ -1,4 +1,4 @@
-version: "2"
+version: "3"
 
 volumes:
   node_modules:
@@ -19,13 +19,15 @@ services:
     ports:
       - "5001:5001"
     links:
-      - mysql:database    
+      - mysql:database
   products-api:
-    build: ./products
+    build:
+      context: .
+      dockerfile: ./products/Dockerfile
     environment:
       APP_NAME: "products-api"
       APP_ENV: "development"
-      LOG_LEVEL: "INFO"
+      LOG_LEVEL: "DEBUG"
       DB_HOST: "database"
       DB_DATABASE: "api"
       DB_USERNAME: "root"

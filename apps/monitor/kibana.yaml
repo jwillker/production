@@ -1,0 +1,107 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kibana
+  namespace: kube-logging
+  labels:
+    app: kibana
+spec:
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 5601
+    name: kibana
+  selector:
+    app: kibana
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kibana
+  namespace: kube-logging
+  labels:
+    app: kibana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      containers:
+      - name: kibana
+        image: docker.elastic.co/kibana/kibana:7.2.0
+        resources:
+          limits:
+            cpu: 1000m
+          requests:
+            cpu: 100m
+        env:
+          - name: ELASTICSEARCH_URL
+            value: http://elasticsearch:9200
+        ports:
+        - containerPort: 5601
+      initContainers:
+      - name: create-metricbeat-index-patern
+        image: busybox
+        command: ["sh", "-c", "curl -X POST http://localhost:5601/api/saved_objects/index-pattern/metricbeat -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -H 'x-vi-plant: male' -d $(PAYLOAD) "]
+        securityContext:
+          privileged: true
+        env:
+        - name: PAYLOAD
+          value: '{"attributes": {"title": "metricbeat-*", "timeFieldName": "@timestamp"}}' 
+#      - name: create-fluentd-index-patern
+#        image: busybox
+#        command: ["sh", "-c", "curl -X POST http://localhost:5601/api/saved_objects/index-pattern/fluentd -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -H 'x-vi-plant: male' -d $(PAYLOAD) "]
+#        securityContext:
+#          privileged: true
+#        env:
+#        - name: PAYLOAD
+#          value: '{"attributes": {"title": "logstash-*", "timeFieldName": "@timestamp"}}' 
+#
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: kibana-gateway
+  namespace: kube-logging
+  labels:
+    app: kibana
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: kibana
+  namespace: kube-logging
+  labels:
+    app: kibana
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - kibana-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /monitor
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        port:
+          number: 80
+        host: kibana.kube-logging.svc.cluster.local 

@@ -49,3 +49,11 @@ resource "aws_ssm_parameter" "k8s-init-token-hash" {
   value = "None"
   overwrite = "true"
 }
+
+resource "aws_ssm_parameter" "kube-config" {
+  name  = "kube-config"
+  type  = "SecureString"
+  tier  = "Advanced"
+  value = "None"
+  overwrite = "true"
+}

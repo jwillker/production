@@ -1,0 +1,26 @@
+replicaCount: 1
+image:
+  repository: apps
+  tag: latest
+  pullPolicy: Always
+service:
+  name: app-service
+  type: ClusterIP
+  build_name: test
+  externalPort: 80
+  internalPort: 80
+http:
+  port: 80
+discounts:
+  port: 5001
+resources:
+ limits:
+   cpu: 1000m
+   memory: 1000Mi
+ requests:
+   cpu: 200m
+   memory: 200Mi
+readinessprobe:
+  initialDelaySeconds: 10
+livenessprobe:
+  initialDelaySeconds: 10

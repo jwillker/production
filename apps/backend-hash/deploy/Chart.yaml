@@ -1,0 +1,4 @@
+apiVersion: v1
+description: Hello Devops Helm Chart
+name: auto-deploy-app
+version: 0.0.1

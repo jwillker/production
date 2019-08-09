@@ -1,4 +1,4 @@
-FROM openjdk:jre
+FROM openjdk:jre AS builder
 
 # Env variables
 ENV SCALA_VERSION 2.12.7
@@ -20,12 +20,20 @@ RUN \
   apt-get install sbt && \
   sbt sbtVersion
 
-COPY . /server
+COPY . /build
 
-WORKDIR /server
+WORKDIR /build
 
 RUN sbt clean assembly
 
+#final
+#FROM openjdk:jre
+FROM openjdk:8u191-jdk-alpine
+
+WORKDIR /server
+
+COPY --from=builder /build/target/scala-2.12/discounts-api-runnable.jar .
+
 EXPOSE 5001
 
-CMD [ "java", "-jar", "./target/scala-2.12/discounts-api-runnable.jar"]
+CMD [ "java", "-jar", "./discounts-api-runnable.jar"]

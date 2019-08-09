@@ -68,7 +68,7 @@ resource "aws_launch_configuration" "nodes" {
   count                       = 1
   name_prefix                 = "node-k8s-"
   image_id                    = "${data.aws_ami.k8s-base.id}"
-  instance_type               = "t2.medium"
+  instance_type               = "t3.xlarge"
   iam_instance_profile        = "${var.iam_instance_profile}"
   key_name                    = "Bastion_Key"
   security_groups             = ["${var.sg_id}"]

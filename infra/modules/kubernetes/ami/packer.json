@@ -39,6 +39,11 @@
         },
         {
             "type": "file",
+            "source": "./kubeadm-node.yaml",
+            "destination": "/tmp/kubeadm-node.yaml"
+        },
+        {
+            "type": "file",
             "source": "./sys-fs-bpf.mount",
             "destination": "/tmp/sys-fs-bpf.mount"
         },
@@ -48,6 +53,7 @@
             "inline": [
                 "sleep 10s",
                 "sudo mv /tmp/kubeadm-config.yaml /opt/kubeadm-config.yaml",
+                "sudo mv /tmp/kubeadm-node.yaml /opt/kubeadm-node.yaml",
                 "sudo mv /tmp/sys-fs-bpf.mount /etc/systemd/system/sys-fs-bpf.mount",
                 "sudo apt-get -y update",
                 "sudo apt-get -y upgrade",
@@ -60,12 +66,8 @@
         {
             "type": "ansible-local",
             "playbook_file": "./playbook.yml"
-        },
-
-        {
-            "type": "inspec",
-            "profile": "./tests/base"
         }
+
 
     ]
 }
