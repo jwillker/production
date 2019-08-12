@@ -1,4 +1,3 @@
-#WIP
 resource "aws_ssm_parameter" "k8s-ca" {
   name  = "k8s-ca"
   type  = "SecureString"

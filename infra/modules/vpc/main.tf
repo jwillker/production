@@ -6,10 +6,6 @@
 #  * Route Table
 #
 
-#terraform {
-#  required_version = ">= 0.11.9" 
-#}
-#
 resource "aws_vpc" "standard" {
   cidr_block           = "${var.cidr_block}"
   enable_dns_hostnames = "true"

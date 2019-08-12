@@ -159,6 +159,8 @@ module "k8s-cluster" {
 
 * Some dns records in Route53
 
+* Bastion instance in Public Subnet with public ip
+
 #### In short it would look like this:
 `Missing a few things i quoted above`
 
@@ -290,9 +292,248 @@ For this scenario helm helps provide reliable deployments
 Implementing:
 
 1. Deployments
+
+* With RollingUpdate strategy, maxUnavailable=0 (Zero downtime deployment)
+
 2. Services
 3. Ingress
 
+* Using Istio Gateway and Virtual Service
+
+All services including Elasticsearch, Kibana are running inside the K8s cluster.
+
+#### In short, an app deployment would look something like this:
+
+![kubernetes](./images/kubernetes-apps.png)
 
 ## Internal tools engineer
 
+#### Makefile with all the steps and some helpers
+#### Scripts to check local dependencies
+#### With Terraform modules, can be a easily implemente a production grade infraestructue using a single declaration file importing the modules
+#### Changing the Dockerfile apps base images and multi-stage build for a faster build and deploy
+
+![tools](./images/verify.png)
+
+# Prerequisites
+
+1. Linux/OSX system
+2. AWS credentials
+3. AWS cli (1.15)
+4. packer
+5. Terraform (11.9)
+6. Helm (2.10)
+7. kubectl
+8. docker
+9. docker-compose(OPTIONAL, only for local dev)
+10. inspec(OPTIONAL, only for local tests and terraform modules)
+
+
+#### All scripts were made using Makefile format, you can see in ./Makefile file all the options or follow the instructions below 
+
+#### Verify if all dependencies is installed:
+
+     $ make verify
+
+#### Install missing dependencies:
+
+1. AWS cli (1.15) [Info](https://docs.aws.amazon.com/cli/latest/userguide/install-linux.html)
+
+For mac/osx:
+
+     $ brew install awscli
+
+For Linux:
+
+     $ pip3 install awscli --upgrade --user
+
+2. packer [Info](https://www.packer.io/downloads.html)
+
+For mac/osx:
+
+     $ brew install packer
+    
+For Linux:
+
+     $ export VER="1.4.1"
+     $ wget https://releases.hashicorp.com/packer/${VER}/packer_${VER}_linux_amd64.zip
+     $ unzip packer_${VER}_linux_amd64.zip
+     $ sudo mv packer /usr/local/bin
+
+3. Terraform (11.9)[Info](https://learn.hashicorp.com/terraform/getting-started/install.html)
+
+For mac/osx:
+
+     $ brew install terraform
+
+For Linux:
+
+     $ sudo apt-get install unzip
+     $ wget https://releases.hashicorp.com/terraform/0.11.9/terraform_0.11.9_linux_amd64.zip
+     $ unzip terraform_0.11.9_linux_amd64.zip
+     $ sudo mv terraform /usr/local/bin/terraform
+     
+4. Helm (2.10)[Info](https://github.com/helm/helm/releases/tag/v2.10.0)
+
+For mac/osx:
+
+     $ wget https://storage.googleapis.com/kubernetes-helm/helm-v2.10.0-darwin-amd64.tar.gz
+     $ tar -zxvf helm-v2.10.0-darwin-amd64.tar.gz
+     $ sudo mv darwin-amd64/helm /usr/local/bin/helm
+
+For Linux:
+
+     $ wget https://storage.googleapis.com/kubernetes-helm/helm-v2.10.0-linux-amd64.tar.gz
+     $ tar -zxvf helm-v2.10.0-linux-amd64.tar.gz
+     $ sudo mv linux-amd64/helm /usr/local/bin/helm
+
+5. kubectl [Info](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+
+For mac/osx:
+
+     $ curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/darwin/amd64/kubectl
+     $ chmod +x ./kubectl
+     $ sudo mv ./kubectl /usr/local/bin/kubectl
+
+For Linux:
+
+     $ curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+     $ chmod +x ./kubectl
+     $ sudo mv ./kubectl /usr/local/bin/kubectl
+
+6. docker [Info](https://docs.docker.com/install/)
+
+For mac/osx:
+
+     See https://docs.docker.com/docker-for-mac/install/
+
+For Linux:
+
+     $ curl -fsSL https://get.docker.com -o get-docker.sh
+     $ sh get-docker.sh
+
+7. docker-compose(OPTIONAL, only for local dev)
+
+For mac/osx:
+
+     Not necessary (built-in with docker installation)
+     
+For Linux:
+
+     $ sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+     $ sudo chmod +x /usr/local/bin/docker-compose
+
+# Usage
+
+#### There are two ways to reproduce this whole scenario, using a single command, or step by step:
+
+Single command:
+
+    $ sudo make deploy/all 
+
+Step-by-step:
+
+AWS credentials, a region must be configured too:
+
+    $ aws configure
+
+Build ami with packer
+
+    $ make infra/ami/build
+
+Terraform init
+
+    $ make infra/prod/init
+
+Terraform apply
+
+    $ make infra/prod/apply
+
+Get kubeconfig, configure /etc/hosts and test kubernetes provision 
+
+    $ sudo make test/api-server/connection
+    
+Build docker images and push
+
+    $ make docker/build/push
+
+Helm init
+
+    $ make helm/init
+    
+Deploy a kubernetes job to create database schema
+
+    $ make script/create/db
+    
+Configure namespaces for istio injection
+
+    $ make istio/enable/injection
+    
+Deploy all the monitoring and logging services in kubernetes
+
+    $ make logging/deploy 
+    
+Create index patterns in Elasticsearch
+
+    $ make logging/create-pattern
+
+Create dashboards in Kibana
+
+    $ make logging/create-dashboards
+
+Show Kibana URL
+
+    $ make logging/url
+    
+Deploy discounts app
+
+    $ make helm/deploy/discounts
+
+Deploy products app
+
+    $ make helm/deploy/products
+
+Show products URL
+
+    $ make products/url
+    
+That is all
+
+For destroy use:
+
+    $ make destroy/all
+
+# Tips/troubles
+
+For the first access in Kibana interface you need click in `Explore on my own`
+
+For access istio telemetry services:
+
+Get the default ingress url:
+    
+    $ make logging/url
+
+And access:
+
+1. Kiali: http://<IP ADDRESS OF CLUSTER INGRESS>:15029
+2. Prometheus: http://<IP ADDRESS OF CLUSTER INGRESS>:15030
+3. Grafana: http://<IP ADDRESS OF CLUSTER INGRESS>:15031
+4. Jaeger: http://<IP ADDRESS OF CLUSTER INGRESS>:15032
+
+* Using port for istio's limitation to serve these services exclusively, based on host header and as i don't have a registered domain we will use it this way.
+
+* During development I used terraform's backend s3, this part is commented, to use just comment in ./infra/live/backend.tf
+
+* If terraform destroy has a problem finishing, caused by some problem due to dynamic provisioning of resources in aws used by kubernetes (in some cases I caught this problem) 
+
+run this:
+
+    $ make ebs/delete
+    $ make sg/delete
+    $ make infra/prod/destroy
+
+* To do remote access using the bastion host, use:
+
+In `./infra/live/prod` directory
+
+    $ ssh -A -o StrictHostKeyChecking=no -J ubuntu@$(terraform output bastion_ip) ubuntu@< REMOTE HOST >

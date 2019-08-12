@@ -2,6 +2,10 @@
 .SHELL := /usr/bin/bash
 .PHONY: apply destroy
 
+#Verify local dependencies
+verify:
+	@bash ./scripts/verify.sh
+
 infra/ami/build:
 	packer build ../../modules/kubernetes/ami/packer.json
 	packer build ../../modules/etcd/ami/packer.json
@@ -205,7 +209,7 @@ sg/delete:
     --filters Name=tag:kubernetes.io/cluster/lab,Values=owned \
   --query "SecurityGroups[*].GroupId[]" | jq '.[]' | xargs -I {} aws ec2 delete-security-group --group-id {}
 
-deploy/all: infra/prod/apply test/api-server/connection docker/registry/login docker/build/push helm/init script/create/db istio/enable/injection logging/deploy logging/create-pattern logging/create-dashboards logging/url helm/deploy/discounts helm/deploy/products products/url
+deploy/all: verify infra/ami/build infra/prod/apply test/api-server/connection docker/registry/login docker/build/push helm/init script/create/db istio/enable/injection logging/deploy logging/create-pattern logging/create-dashboards logging/url helm/deploy/discounts helm/deploy/products products/url
 
 destroy/all: helm/delete/products helm/delete/discounts helm/delete/istio logging/delete ebs/delete infra/prod/destroy api-server/delete/hosts
 

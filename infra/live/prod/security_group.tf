@@ -39,30 +39,7 @@ module "security_group" {
   description = "Kubernetes comunication"
 
   ingress_cidr_blocks = ["0.0.0.0/0"] # VPC CIDR BLOCK
-  # TODO fix the error caused by use this
-#  ingress_with_source_security_group_id = [
-#    {
-#      rule                     = "all-icmp"
-#      source_security_group_id = "${element(module.security_group.security_group_id, 0)}"
-#    },
-#    {
-#      rule                     = "cilium-8472-udp"
-#      source_security_group_id = "${element(module.security_group.security_group_id, 0)}"
-#    },
-#    {
-#      rule                     = "kubelet-10250-tcp"
-#      source_security_group_id = "${element(module.security_group.security_group_id, 0)}"
-#    },
-#    {
-#      rule                     = "kube-scheduler-10251-tcp"
-#      source_security_group_id = "${element(module.security_group.security_group_id, 0)}"
-#    },
-#    {
-#      rule                     = "kube-controller-mgt-10252-tcp"
-#      source_security_group_id = "${element(module.security_group.security_group_id, 0)}"
-#    },
-#  ]
-#
+
   ingress_rules = [
     "ssh-tcp",
     "all-icmp",
