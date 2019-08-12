@@ -7,8 +7,8 @@ verify:
 	@bash ./scripts/verify.sh
 
 infra/ami/build:
-	packer build ../../modules/kubernetes/ami/packer.json
-	packer build ../../modules/etcd/ami/packer.json
+	cd ./infra/modules/kubernetes/ami/ && packer build packer.json
+	cd ./infra/modules/etcd/ami/ && packer build packer.json
 
 infra/backend/init:
 	cd infra/live/remote-state && terraform init

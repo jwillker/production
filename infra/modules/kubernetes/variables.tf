@@ -10,6 +10,11 @@ variable "cluster_tag" {
   description = "Value of kubernetes cluster tag + cluster name"
 }
 
+variable "key_name" {
+  description = "The key name to use for the instance"
+  default     = ""
+}
+
 variable "nodes" {
   description = "Number of nodes to provision"
 }

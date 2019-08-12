@@ -327,6 +327,7 @@ All services including Elasticsearch, Kibana are running inside the K8s cluster.
 8. docker
 9. docker-compose(OPTIONAL, only for local dev)
 10. inspec(OPTIONAL, only for local tests and terraform modules)
+11. jq
 
 
 #### All scripts were made using Makefile format, you can see in ./Makefile file all the options or follow the instructions below 
@@ -357,6 +358,7 @@ For Linux:
 
      $ export VER="1.4.1"
      $ wget https://releases.hashicorp.com/packer/${VER}/packer_${VER}_linux_amd64.zip
+     $ sudo apt-get install unzip
      $ unzip packer_${VER}_linux_amd64.zip
      $ sudo mv packer /usr/local/bin
 
@@ -420,8 +422,18 @@ For mac/osx:
      
 For Linux:
 
-     $ sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    $ sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
      $ sudo chmod +x /usr/local/bin/docker-compose
+ 
+8. jq
+
+For mac/osx:
+
+    $ brew install jq
+    
+For Linux:
+
+    $ sudo apt-get install jq
 
 # Usage
 
@@ -533,6 +545,10 @@ run this:
     $ make infra/prod/destroy
 
 * To do remote access using the bastion host, use:
+
+Add ssh key:
+
+    $ ssh-add ./infra/modules/instances/deploy-key
 
 In `./infra/live/prod` directory
 

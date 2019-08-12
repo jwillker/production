@@ -5,7 +5,7 @@ module "master-1" {
   instance_type          = "t2.medium"
   servers                = 1
   user_data_base64       = "${base64encode(data.template_file.master_init.rendered)}"
-  key_name               = "Bastion_Key"
+  key_name               = "${var.key_name}"
   iam_instance_profile   = "${var.iam_instance_profile}"
   availability_zone      = "${element(var.availability_zone, 0)}"
   subnet_id              = "${element(var.subnet_id, 0)}"
@@ -27,7 +27,7 @@ module "master-2" {
   instance_type          = "t2.medium"
   servers                = 1
   user_data_base64       = "${base64encode(data.template_file.master_join.rendered)}"
-  key_name               = "Bastion_Key"
+  key_name               = "${var.key_name}"
   iam_instance_profile   = "${var.iam_instance_profile}"
   availability_zone      = "${element(var.availability_zone, 1)}"
   subnet_id              = "${element(var.subnet_id, 1)}"
@@ -49,7 +49,7 @@ module "master-3" {
   instance_type          = "t2.medium"
   servers                = 1
   user_data_base64       = "${base64encode(data.template_file.master_join.rendered)}"
-  key_name               = "Bastion_Key"
+  key_name               = "${var.key_name}"
   iam_instance_profile   = "${var.iam_instance_profile}"
   availability_zone      = "${element(var.availability_zone, 2)}"
   subnet_id              = "${element(var.subnet_id, 2)}"
@@ -70,7 +70,7 @@ resource "aws_launch_configuration" "nodes" {
   image_id                    = "${data.aws_ami.k8s-base.id}"
   instance_type               = "t3.xlarge"
   iam_instance_profile        = "${var.iam_instance_profile}"
-  key_name                    = "Bastion_Key"
+  key_name                    = "${var.key_name}"
   security_groups             = ["${var.sg_id}"]
   user_data_base64            = "${base64encode(data.template_file.node_join.rendered)}"
 

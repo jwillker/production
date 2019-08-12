@@ -5,7 +5,7 @@ module "etcd-1" {
   instance_type    = "t2.medium"
   servers          = 1
   user_data_base64 = "${base64encode(data.template_file.user_data.rendered)}"
-  key_name         = "Bastion_Key"
+  key_name         = "${var.key_name}"
   subnet_id        = "${element(var.subnet_id, 0)}"
 
   iam_instance_profile = "${var.iam_instance_profile}"
@@ -28,7 +28,7 @@ module "etcd-2" {
   instance_type    = "t2.medium"
   servers          = 1
   user_data_base64 = "${base64encode(data.template_file.user_data.rendered)}"
-  key_name         = "Bastion_Key"
+  key_name         = "${var.key_name}"
   subnet_id        = "${element(var.subnet_id, 1)}"
 
   iam_instance_profile = "${var.iam_instance_profile}"
@@ -51,7 +51,7 @@ module "etcd-3" {
   instance_type    = "t2.medium"
   servers          = 1
   user_data_base64 = "${base64encode(data.template_file.user_data.rendered)}"
-  key_name         = "Bastion_Key"
+  key_name         = "${var.key_name}"
   subnet_id        = "${element(var.subnet_id, 2)}"
 
   iam_instance_profile = "${var.iam_instance_profile}"

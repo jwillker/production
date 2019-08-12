@@ -8,6 +8,12 @@ variable "zone_suffix" {
   type        = "list"
 }
 
+variable "key_name" {
+  description = "The key name to use for the instance"
+  default     = ""
+}
+
+
 variable "iam_instance_profile" {
   description = "Profile to attach in nodes, for access SSM"
 }
