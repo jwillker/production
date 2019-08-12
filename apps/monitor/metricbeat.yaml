@@ -24,6 +24,8 @@ data:
       hosts: ['${ELASTICSEARCH_HOST:elasticsearch}:${ELASTICSEARCH_PORT:9200}']
       username: ${ELASTICSEARCH_USERNAME}
       password: ${ELASTICSEARCH_PASSWORD}
+    setup.kibana:
+      host: "kibana.kube-logging.svc.cluster.local:80"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -43,9 +45,6 @@ data:
         - network
         - process
         - process_summary
-        #- core
-        #- diskio
-        #- socket
       processes: ['.*']
       process.include_top_n:
         by_cpu: 5      # include top 5 processes by CPU
@@ -60,6 +59,18 @@ data:
       - drop_event.when.regexp:
           system.filesystem.mount_point: '^/(sys|cgroup|proc|dev|etc|host|lib)($|/)'
   kubernetes.yml: |-
+    - module: docker
+      metricsets:
+        - container
+        - cpu
+        - diskio
+        - healthcheck
+        - info
+        - memory
+        - network
+      hosts: ["unix:///var/run/docker.sock"]
+      period: 10s
+      
     - module: kubernetes
       metricsets:
         - node
@@ -69,7 +80,11 @@ data:
         - volume
       period: 10s
       host: ${NODE_NAME}
-      hosts: ["localhost:10255"]
+      hosts: ["https://${NODE_NAME}:10250"]
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      ssl.verification_mode: none
+      ssl.certificate_authorities:
+        - /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
 ---
 # Deploy a Metricbeat instance per node for node metrics retrieval
 apiVersion: extensions/v1beta1
@@ -99,7 +114,7 @@ spec:
         ]
         env:
         - name: ELASTICSEARCH_HOST
-          value: elasticsearch
+          value: elasticsearch.kube-logging.svc.cluster.local
         - name: ELASTICSEARCH_PORT
           value: "9200"
         - name: ELASTICSEARCH_USERNAME
@@ -186,6 +201,8 @@ data:
       hosts: ['${ELASTICSEARCH_HOST:elasticsearch}:${ELASTICSEARCH_PORT:9200}']
       username: ${ELASTICSEARCH_USERNAME}
       password: ${ELASTICSEARCH_PASSWORD}
+    setup.kibana:
+      host: "kibana.kube-logging.svc.cluster.local:80"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -195,20 +212,18 @@ metadata:
   labels:
     k8s-app: metricbeat
 data:
-  # This module requires `kube-state-metrics` up and running under `kube-system` namespace
   kubernetes.yml: |-
     - module: kubernetes
       metricsets:
         - state_node
         - state_deployment
         - state_replicaset
+        - state_statefulset
         - state_pod
         - state_container
-        # Uncomment this to get k8s events:
-        #- event
       period: 10s
       host: ${NODE_NAME}
-      hosts: ["kube-state-metric.kube-system.svc.cluster.local:8080"]
+      hosts: ["kube-state-metrics.kube-system.svc.cluster.local:8080"]
 ---
 # Deploy singleton instance in the whole cluster for some unique data sources, like kube-state-metrics
 apiVersion: apps/v1beta1

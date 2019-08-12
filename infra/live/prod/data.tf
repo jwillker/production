@@ -17,3 +17,16 @@ data "aws_ami" "latest-ubuntu" {
     values = ["hvm"]
   }
 }
+
+data  "template_file" "database-init" {
+  template = "${file("./database-init.tpl")}"
+  vars {
+    IMAGEDATABASE  = "${aws_ecr_repository.database.repository_url}"
+    MYSQLHOST      = "${aws_db_instance.db.address}"
+  }
+}
+
+resource "local_file" "k8s_file" {
+  content  = "${data.template_file.database-init.rendered}"
+  filename = "../../../apps/backend-hash/database/init.yaml"
+}

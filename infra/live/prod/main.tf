@@ -43,7 +43,7 @@ module "etcd-cluster" {
 # Create Kubernetes masters
 module "k8s-cluster" {
   source                 = "../../modules/kubernetes"
-  nodes                  = 3
+  nodes                  = 4
   cluster_tag            = "${local.kube_cluster_tag}"
   iam_instance_profile   = "${aws_iam_instance_profile.aws_iam_instance_profile.name}"
   availability_zone      = ["${local.az_a}", "${local.az_b}", "${local.az_c}"]

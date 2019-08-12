@@ -48,9 +48,17 @@ spec:
         - name: "{{ .Values.service.name }}"
           containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
+          {{- if eq .Values.livenessprobe.typeProbe "httpGet" }}
           httpGet:
             path: {{ .Values.service.probe.healthcheck }}
             port: {{ .Values.service.internalPort }}
+          {{- end  }}
+          {{- if eq .Values.livenessprobe.typeProbe "tcpSocket" }}
+          tcpSocket:
+            port: {{ .Values.grpc.port }} 
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          {{- end  }}
           initialDelaySeconds: {{ .Values.livenessprobe.initialDelaySeconds }}
           timeoutSeconds: 10
           failureThreshold: 5
@@ -62,13 +70,14 @@ spec:
           {{- end  }}
           {{- if eq .Values.livenessprobe.typeProbe "tcpSocket" }}
           tcpSocket:
-            port: {{ .Values.grpc.port | quote }} 
+            port: {{ .Values.grpc.port }} 
           initialDelaySeconds: 5
           periodSeconds: 10
           {{- end  }}
           initialDelaySeconds: {{ .Values.readinessprobe.initialDelaySeconds }}
           timeoutSeconds: 10
           failureThreshold: 5
+
         resources:
           requests:
             memory: {{ .Values.resources.requests.memory }}

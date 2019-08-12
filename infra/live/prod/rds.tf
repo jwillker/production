@@ -18,5 +18,5 @@ resource "aws_db_instance" "db" {
 resource "aws_db_subnet_group" "db_sb" {
   name        = "main_subnet_group"
   description = "Group of public subnets"
-  subnet_ids  = ["${module.vpc.public_subnets_id}"]
+  subnet_ids  = ["${module.vpc.private_subnets_id}"]
 }

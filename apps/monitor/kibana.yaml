@@ -45,24 +45,6 @@ spec:
             value: http://elasticsearch:9200
         ports:
         - containerPort: 5601
-      initContainers:
-      - name: create-metricbeat-index-patern
-        image: busybox
-        command: ["sh", "-c", "curl -X POST http://localhost:5601/api/saved_objects/index-pattern/metricbeat -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -H 'x-vi-plant: male' -d $(PAYLOAD) "]
-        securityContext:
-          privileged: true
-        env:
-        - name: PAYLOAD
-          value: '{"attributes": {"title": "metricbeat-*", "timeFieldName": "@timestamp"}}' 
-#      - name: create-fluentd-index-patern
-#        image: busybox
-#        command: ["sh", "-c", "curl -X POST http://localhost:5601/api/saved_objects/index-pattern/fluentd -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -H 'x-vi-plant: male' -d $(PAYLOAD) "]
-#        securityContext:
-#          privileged: true
-#        env:
-#        - name: PAYLOAD
-#          value: '{"attributes": {"title": "logstash-*", "timeFieldName": "@timestamp"}}' 
-#
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
