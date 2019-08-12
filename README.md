@@ -1,8 +1,4 @@
-# Production Grade Environment For Microservice
-
-# Sumary
-#TODO add sumary
-#
+# Production Grade Environment For Microservices
 
 # Topics
 
@@ -166,7 +162,7 @@ module "k8s-cluster" {
 
 ![aws](./images/aws-diagram.png)
 
-## Kubernetes admistration (the most focused)
+## Kubernetes admistration (The most focused)
 
 #### Cluster with HA masters
 
@@ -347,6 +343,10 @@ For mac/osx:
 For Linux:
 
      $ pip3 install awscli --upgrade --user
+
+or
+
+     $ sudo pip3 install awscli --upgrade --user
 
 2. packer [Info](https://www.packer.io/downloads.html)
 

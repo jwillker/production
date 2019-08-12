@@ -15,7 +15,7 @@ module "master-1" {
   ]
 
   tags = {
-    Environment          = "staging"
+    Environment          = "production"
     "${var.cluster_tag}" = "shared"
   }
 }
@@ -37,7 +37,7 @@ module "master-2" {
   ]
 
   tags = {
-    Environment          = "staging"
+    Environment          = "production"
     "${var.cluster_tag}" = "shared"
   }
 }
@@ -59,7 +59,7 @@ module "master-3" {
   ]
 
   tags = {
-    Environment          = "staging"
+    Environment          = "production"
     "${var.cluster_tag}" = "shared"
   }
 }

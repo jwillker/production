@@ -30,3 +30,15 @@ resource "local_file" "k8s_file" {
   content  = "${data.template_file.database-init.rendered}"
   filename = "../../../apps/backend-hash/database/init.yaml"
 }
+
+data  "template_file" "storage" {
+  template = "${file("./storage.tpl")}"
+  vars {
+    AWS_DEFAULT_REGION  = "${var.AWS_DEFAULT_REGION}"
+  }
+}
+
+resource "local_file" "storage_file" {
+  content  = "${data.template_file.storage.rendered}"
+  filename = "../../../apps/monitor/storage.yaml"
+}

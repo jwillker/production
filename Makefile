@@ -184,6 +184,7 @@ helm/deploy/products:
 
 products/url:
 	@$(eval INGRESS_HOST := $(shell kubectl --kubeconfig infra/live/prod/kube.config -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'))
+	kubectl --kubeconfig infra/live/prod/kube.config rollout status -n products -w "deployment/production-products"
 	@echo "ACCESS PRODUCTS IN: ...."
 	@echo $(INGRESS_HOST)'/products'
 	@echo " "

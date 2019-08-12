@@ -4,14 +4,14 @@
         "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
         "aws_keypair_name": "{{env `AWS_KEYPAIR_NAME`}}",
         "aws_keypair_file": "{{env `AWS_KEYPAIR_FILE`}}",
-        "region":         "us-east-1"
+        "region":         "{{env `AWS_REGION`}}"
     },
     "builders": [
         {
             "access_key": "{{user `aws_access_key`}}",
             "ami_name": "k8s-base-{{ timestamp }}",
             "instance_type": "t2.micro",
-            "region": "us-east-1",
+            "region": "{{user `aws_access_key`}}",
             "secret_key": "{{user `aws_secret_key`}}",
             "source_ami_filter": {
               "filters": {

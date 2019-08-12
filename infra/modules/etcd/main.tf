@@ -17,7 +17,7 @@ module "etcd-1" {
   ]
 
   tags   = {
-    Environment = "staging"
+    Environment = "production"
   }
 }
 
@@ -40,7 +40,7 @@ module "etcd-2" {
   ]
 
   tags   = {
-    Environment = "staging"
+    Environment = "production"
   }
 }
 
@@ -63,6 +63,6 @@ module "etcd-3" {
   ]
 
   tags   = {
-    Environment = "staging"
+    Environment = "production"
   }
 }

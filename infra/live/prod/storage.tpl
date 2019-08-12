@@ -5,6 +5,6 @@ metadata:
 provisioner: kubernetes.io/aws-ebs
 parameters:
   type: gp2
-  zones: us-east-1a, us-east-1b
+  zones: ${AWS_DEFAULT_REGION}a, ${AWS_DEFAULT_REGION}b
   iopsPerGB: "10"
   fsType: ext4
