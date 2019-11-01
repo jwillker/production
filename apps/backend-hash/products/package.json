@@ -16,7 +16,7 @@
     "figlet": "^1.2.1",
     "grpc": "1.15.1",
     "grpc-dynamic-gateway": "0.3.4",
-    "knex": "0.15.2",
+    "knex": "0.19.5",
     "loglevel": "1.6.1",
     "mysql2": "1.6.1",
     "nconf": "0.10.0",
