@@ -14,7 +14,7 @@
     "body-parser": "1.18.3",
     "express": "4.16.4",
     "figlet": "^1.2.1",
-    "grpc": "1.15.1",
+    "grpc": "1.24.9",
     "grpc-dynamic-gateway": "0.3.4",
     "knex": "0.15.2",
     "loglevel": "1.6.1",
