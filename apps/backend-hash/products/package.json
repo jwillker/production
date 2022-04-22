@@ -19,7 +19,7 @@
     "knex": "0.15.2",
     "loglevel": "1.6.1",
     "mysql2": "1.6.1",
-    "nconf": "0.10.0",
+    "nconf": "0.11.4",
     "ramda": "0.25.0"
   },
   "devDependencies": {
